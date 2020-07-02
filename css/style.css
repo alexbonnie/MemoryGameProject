@@ -5,12 +5,10 @@
 }
 
 .grid {
-  max-width: 1280px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  width: 1200px;
   margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  flex-flow: row wrap;
-  justify-content: space-evenly;
 }
 
 .card {
@@ -57,4 +55,11 @@
 
 .match {
   background-image: none !important;
+}
+
+@media all and (max-width: 1250px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    width: 600px;
+  }
 }
