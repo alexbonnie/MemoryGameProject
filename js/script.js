@@ -128,7 +128,7 @@ function startCardGame() {
                 finalScore['score'] = model.clicks;
                 window.localStorage.setItem('userScore', JSON.stringify(finalScore))
                 window.location.hash = "#end";
-                updateWindowView();
+                // updateWindowView();
                 //location.reload();
             }
         }

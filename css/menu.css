@@ -101,7 +101,7 @@ input[type="text"]::-moz-placeholder {
 
 .congrats p,
 h2 {
-    margin: 10% auto;
+    margin: 5% auto;
     text-align: center;
     color: #fff;
     font-family: "Segoe UI Light", sans-serif;
