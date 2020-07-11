@@ -1,91 +1,24 @@
-// создаём массив с данными для карт
-
-const cardsData = [
-    {
-        name: 'one',
-        img: 'img/1.png',
-    },
-    {
-        name: 'two',
-        img: 'img/2.png',
-    },
-    {
-        name: 'three',
-        img: 'img/3.png',
-    },
-    {
-        name: 'four',
-        img: 'img/4.png',
-    },
-    {
-        name: 'five',
-        img: 'img/5.png',
-    },
-    {
-        name: 'six',
-        img: 'img/6.png',
-    },
-    {
-        name: 'seven',
-        img: 'img/7.png',
-    },
-    {
-        name: 'eight',
-        img: 'img/8.png',
-    },
-    {
-        name: 'nine',
-        img: 'img/9.png',
-    },
-    {
-        name: 'ten',
-        img: 'img/10.png',
-    },
-    {
-        name: 'eleven',
-        img: 'img/11.png',
-    },
-    {
-        name: 'twelve',
-        img: 'img/12.png',
-    },
-    {
-        name: 'thirteen',
-        img: 'img/13.png',
-    },
-    {
-        name: 'fourteen',
-        img: 'img/14.png',
-    },
-    {
-        name: 'fifteen',
-        img: 'img/15.png',
-    },
-    {
-        name: 'sixteen',
-        img: 'img/16.png',
-    }
-];
-
-
-
-
-
-
-
-
 // описываем функцию запуска игры
 function startCardGame() {
-    // view
+    // создаём массив с данными для карт
+    let cardsData = JSON.parse(window.localStorage.getItem('targetCards'));
     let gameGrid = cardsData.concat(cardsData);
 
     //перемешиваем карты
     gameGrid.sort(() => 0.5 - Math.random());
 
-    const game = document.getElementById('game');
-    const grid = document.createElement('section');
+    let game = document.querySelector('#main');
+    let grid = document.createElement('section');
     grid.setAttribute('class', 'grid');
-    game.appendChild(grid);
+
+    // задаём порядок отображения гридам
+    if (gameGrid.length == 24) {
+        grid.style.cssText = 'grid-template-columns: repeat(6, 1fr); width: 1000px;';
+    } else if (gameGrid.length == 32) {
+        grid.style.cssText = 'grid-template-columns: repeat(8, 1fr); width: 1200px;';
+    }
+
+    game.before(grid);
 
     // создаём карты
     gameGrid.forEach(item => {
@@ -104,8 +37,7 @@ function startCardGame() {
         grid.appendChild(card);
         card.appendChild(front);
         card.appendChild(back);
-    })
-
+    });
 
     // модель данных
     const model = {
@@ -116,20 +48,20 @@ function startCardGame() {
         clicks: 0,
         previousTarget: null,
 
-         // проверка совпадения
+        // проверка совпадения
         match () {
             let selected = document.querySelectorAll('.selected');
             selected.forEach(card => {
                 card.classList.add('match');
-            })
+            });
+            // если карты совпали, убираем их из вью
             if (document.querySelectorAll('.match').length === (cardsData.length * 2)) {
-
-                let finalScore = JSON.parse(window.localStorage.getItem('userScore'));
-                finalScore['score'] = model.clicks;
-                window.localStorage.setItem('userScore', JSON.stringify(finalScore))
+                // записываем клики в локалсторидж
+                let users = JSON.parse(window.localStorage.getItem('userScore'));
+                users[users.length - 1].score = model.clicks;
+                window.localStorage.setItem('userScore', JSON.stringify(users));
+                document.querySelector('section').remove();
                 window.location.hash = "#end";
-                // updateWindowView();
-                //location.reload();
             }
         }
     }
@@ -153,7 +85,7 @@ function startCardGame() {
         music.play();
 
         let clicked = event.target;
-
+        // не даёт выбрать уже открытую карту или исчезнувшую
         if (
             clicked.nodeName === 'SECTION' ||
             clicked === model.previousTarget ||
@@ -162,9 +94,10 @@ function startCardGame() {
         ) {
             return;
         }
-
+        // открыть только две карты
         if (model.count < 2) {
             model.count++;
+            // если количество выбранных карт равно 1, переворачиваем вторую, иначе возвращаем исходное положение
             if (model.count === 1) {
                 model.firstGuess = clicked.parentNode.dataset.name;
                 clicked.parentNode.classList.add('selected');

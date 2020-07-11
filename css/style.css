@@ -6,9 +6,9 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(4, 1fr);
+  width: 600px;
+  margin: 5% auto;
 }
 
 .card {
