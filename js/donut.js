@@ -1,14 +1,6 @@
 //анимация пончика на стартовой странице
-// let field = document.getElementById('main');
-// let donut = document.createElement("div");
-// donut.setAttribute("id", "donut");
-// field.append(donut);
 let donut = document.querySelector('#donut');
-//создаём хэш для хранения свойств поля
-let fieldHash = {
-    width: document.documentElement.clientWidth,
-    height: document.documentElement.clientHeight,
-};
+
 //создаём хэш для хранения свойств и методов пончика
 let donutHash = {
     posX: 0,
@@ -26,13 +18,12 @@ let donutHash = {
         donut.style.top = `${this.posY}px`;
     },
 };
-
 donutHash.updateDonutCoordinates();
+
 //запускаем пончик
 window.addEventListener('load', function() {
     moveDonut();
 });
-
 
 function moveDonut() {
     donutHash.posX += donutHash.speedX;
@@ -45,7 +36,7 @@ function moveDonut() {
     }
 
     // касание правой стены
-    if (donutHash.posX + donutHash.width > fieldHash.width) {
+    if (donutHash.posX + donutHash.width > window.innerWidth) {
         donutHash.updateDonutDirection();
         donutHash.speedX = -donutHash.speedX;
     }
@@ -57,9 +48,9 @@ function moveDonut() {
     }
 
     // касание bottom
-    if (donutHash.posY + donutHash.height > fieldHash.height) {
+    if (donutHash.posY + donutHash.height > window.innerHeight) {
         donutHash.speedY = -donutHash.speedY;
-        donutHash.posY = fieldHash.height - donutHash.height;
+        donutHash.posY = window.innerHeight - donutHash.height;
     }
     donutHash.updateDonutCoordinates();
     window.requestAnimationFrame(moveDonut);
